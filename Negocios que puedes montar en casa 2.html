@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Negocios que puedes montar en casa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F1EEF7;--surface:#FFFFFF;--ink:#241B36;--muted:#5E5873;--line:#D6CEE6;
+  --accent:#6B3FB8;--accent-ink:#FFFFFF;--mark:#E3A02F;
+  --head:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#17121F;--surface:#211A2E;--ink:#ECE6F5;--muted:#A89FBD;--line:#3A2F50;
+    --accent:#B79AF0;--accent-ink:#17121F;--mark:#E8B04F;color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#17121F;--surface:#211A2E;--ink:#ECE6F5;--muted:#A89FBD;--line:#3A2F50;
+  --accent:#B79AF0;--accent-ink:#17121F;--mark:#E8B04F;color-scheme:dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1.0625rem/1.6 var(--body)}
+main{max-width:860px;margin:0 auto;padding:3rem 1.25rem 4rem}
+h1{font:700 clamp(2.1rem,6vw,3.4rem)/1.05 var(--head);letter-spacing:-.02em;margin:0 0 1rem;max-width:16ch}
+.lead{color:var(--muted);max-width:56ch;margin:0 0 2.5rem}
+
+/* Frase interactiva */
+.sentence{font:500 clamp(1.3rem,3.6vw,1.75rem)/2.1 var(--head);margin:0 0 .75rem}
+.seg{display:inline-flex;flex-wrap:wrap;gap:.25rem;vertical-align:middle;margin:0 .25rem;padding:.25rem;background:var(--surface);border:1px solid var(--line);border-radius:.75rem}
+.seg button{font:600 .95rem/1 var(--body);color:var(--ink);background:transparent;border:0;border-radius:.5rem;padding:.55rem .8rem;cursor:pointer;transition:background .15s,color .15s}
+.seg button:hover{background:var(--bg)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+button:focus-visible{outline:3px solid var(--mark);outline-offset:2px}
+.count{color:var(--muted);margin:0 0 1.5rem;font-weight:500}
+
+/* Resultados */
+#list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:1fr;gap:.9rem 2rem;padding:1.5rem 0;border-bottom:1px solid var(--line);border-left:4px solid var(--accent);padding-left:1.1rem}
+.row[data-t="Lento"]{border-left-color:var(--mark)}
+.row h2{font:700 1.35rem/1.2 var(--head);margin:0 0 .35rem}
+.row p{margin:0;color:var(--muted);max-width:52ch}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:0}
+.facts dt{font-size:.85rem;color:var(--muted)}
+.facts dd{margin:.1rem 0 0;font-weight:600}
+.tag{display:inline-block;font-size:.85rem;font-weight:600;margin-top:.6rem}
+@media (min-width:760px){
+  .row{grid-template-columns:1.3fr 1fr;align-items:center}
+}
+.empty{padding:2rem 0;color:var(--muted)}
+.note{margin-top:2.5rem;padding:1.25rem 1.4rem;background:var(--surface);border:1px solid var(--line);border-radius:.75rem}
+.note h3{font:700 1.1rem/1.2 var(--head);margin:0 0 .5rem}
+.note ul{margin:0;padding-left:1.2rem;color:var(--muted)}
+.note li+li{margin-top:.35rem}
+.fine{font-size:.9rem;color:var(--muted);margin-top:1.5rem}
+@media (prefers-reduced-motion:reduce){.seg button{transition:none}}
+</style>
+</head>
+<body>
+<main>
+  <h1>Un negocio desde tu mesa de la cocina</h1>
+  <p class="lead">Ocho formas de generar ingresos sin local ni oficina. Cuéntanos con qué cuentas y la lista se ajusta.</p>
+
+  <p class="sentence">
+    Puedo invertir
+    <span class="seg" id="inv" role="group" aria-label="Inversión inicial">
+      <button type="button" data-v="1">menos de $200</button>
+      <button type="button" data-v="2" aria-pressed="true">hasta $600</button>
+      <button type="button" data-v="3">más de $600</button>
+    </span>
+    y dedicarle
+    <span class="seg" id="hrs" role="group" aria-label="Horas por semana">
+      <button type="button" data-v="5">5 h</button>
+      <button type="button" data-v="10" aria-pressed="true">10 h</button>
+      <button type="button" data-v="20">20 h o más</button>
+    </span>
+    a la semana.
+  </p>
+  <p class="count" id="count" aria-live="polite"></p>
+
+  <ul id="list"></ul>
+
+  <section class="note">
+    <h3>Antes de lanzarte</h3>
+    <ul>
+      <li>Prueba la idea con un primer cliente antes de comprar material o pagar herramientas.</li>
+      <li>Revisa si tu actividad requiere registro fiscal o permisos sanitarios.</li>
+      <li>Separa el dinero del negocio del dinero personal desde el primer día.</li>
+    </ul>
+  </section>
+  <p class="fine">Los montos están en dólares y son cifras de ejemplo para ilustrar la página; el resultado real depende de tu mercado y tu experiencia.</p>
+</main>
+
+<script>
+var MODELOS = [
+  {n:"Servicios freelance",d:"Redacción, diseño, traducción o programación para clientes que pagan por proyecto.",c:[0,150],h:[10,30],i:[300,3000],t:"Rápido"},
+  {n:"Asistente virtual",d:"Gestionas agenda, correo y tareas administrativas de otras personas o pequeñas empresas.",c:[0,100],h:[15,30],i:[400,1800],t:"Rápido"},
+  {n:"Tutorías en línea",d:"Das clases particulares de un idioma, una materia o un instrumento por videollamada.",c:[50,150],h:[5,20],i:[200,1500],t:"Rápido"},
+  {n:"Comida casera por encargo",d:"Cocinas pedidos semanales: postres, comidas preparadas o cajas para eventos.",c:[150,500],h:[12,30],i:[300,2500],t:"Medio"},
+  {n:"Reventa de segunda mano",d:"Compras artículos con descuento y los vendes en marketplaces y grupos locales.",c:[200,600],h:[5,15],i:[150,1200],t:"Medio"},
+  {n:"Productos artesanales",d:"Velas, joyería, cerámica o prendas hechas a mano, vendidas en línea y en ferias.",c:[300,1000],h:[10,25],i:[200,1800],t:"Medio"},
+  {n:"Curso o contenido digital",d:"Conviertes lo que sabes en un curso, una plantilla o una guía que se vende muchas veces.",c:[500,1200],h:[5,15],i:[100,3500],t:"Lento"},
+  {n:"Tienda en línea",d:"Vendes productos propios o de proveedores con tu propia tienda y publicidad.",c:[800,3000],h:[10,30],i:[200,5000],t:"Lento"}
+];
+var COSTE = {1:200, 2:601, 3:Infinity};
+var estado = {inv:2, hrs:10};
+
+function money(r){ return "$" + r[0].toLocaleString("es-MX") + "–" + r[1].toLocaleString("es-MX"); }
+
+function pintar(){
+  var lista = MODELOS.filter(function(m){ return m.c[0] < COSTE[estado.inv] && m.h[0] <= estado.hrs; });
+  var ul = document.getElementById("list");
+  var cuenta = document.getElementById("count");
+  cuenta.textContent = lista.length === 1 ? "1 modelo encaja con lo que tienes" : lista.length + " modelos encajan con lo que tienes";
+  if(!lista.length){
+    ul.innerHTML = '<li class="empty">Ningún modelo encaja. Sube un poco las horas o la inversión para ver opciones.</li>';
+    return;
+  }
+  ul.innerHTML = lista.map(function(m){
+    return '<li class="row" data-t="' + m.t + '"><div><h2>' + m.n + '</h2><p>' + m.d +
+      '</p><span class="tag">Arranque ' + m.t.toLowerCase() + '</span></div>' +
+      '<dl class="facts"><div><dt>Inversión</dt><dd>' + money(m.c) + '</dd></div>' +
+      '<div><dt>Horas/semana</dt><dd>' + m.h[0] + "–" + m.h[1] + '</dd></div>' +
+      '<div><dt>Ingreso/mes</dt><dd>' + money(m.i) + '</dd></div></dl></li>';
+  }).join("");
+}
+
+function enlazar(id, clave){
+  var grupo = document.getElementById(id);
+  grupo.addEventListener("click", function(e){
+    var b = e.target.closest("button");
+    if(!b) return;
+    estado[clave] = Number(b.dataset.v);
+    grupo.querySelectorAll("button").forEach(function(x){ x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+    pintar();
+  });
+}
+enlazar("inv","inv");
+enlazar("hrs","hrs");
+pintar();
+</script>
+</body>
+</html>
